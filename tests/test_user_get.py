@@ -1,9 +1,15 @@
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
+import allure
 
 
+@allure.feature("Users")
 class TestUserGet(BaseCase):
+
+    @allure.story("Получение пользваотеля")
+    @allure.title("Получение пользователя не авторизовавшись")
+    @allure.severity(allure.severity_level.NORMAL)
     def test_get_user_details_not_auth(self):
         response = MyRequests.get('/user/2')
         Assertions.assert_json_has_key(response, 'username')
@@ -11,6 +17,9 @@ class TestUserGet(BaseCase):
         Assertions.assert_json_has_not_key(response, 'firstName')
         Assertions.assert_json_has_not_key(response, 'lastName')
 
+    @allure.story("Получение пользваотеля")
+    @allure.title("Получение авторизованного пользоватлея")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_get_user_details_auth_as_name_user(self):
         data = {
             'email': 'vinkotov@example.com',
