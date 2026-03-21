@@ -2,8 +2,10 @@ import pytest
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
+import allure
 
 
+@allure.feature("Users")
 class TestUserAuth(BaseCase):
     exclude_params = [
         ('no_cookie'),
@@ -21,6 +23,8 @@ class TestUserAuth(BaseCase):
         self.token = self.get_header(response1, 'x-csrf-token')
         self.user_id_from_auth_method = self.get_json_value(response1, 'user_id')
 
+    @allure.title("Авторизация пользователя")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_auth_user(self):
         response2 = MyRequests.get(
             '/user/auth',
@@ -35,6 +39,8 @@ class TestUserAuth(BaseCase):
             'User id from auth method is not equal to user id from check method'
         )
 
+    @allure.title("Авторизация пользователя без кук/хедеров")
+    @allure.severity(allure.severity_level.NORMAL)
     @pytest.mark.parametrize('condition', exclude_params)
     def test_negative_auth_check(self, condition):
         if condition == 'no_cookie':

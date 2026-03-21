@@ -1,9 +1,14 @@
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
+import allure
 
 
+@allure.feature("Users")
 class TestUserEdit(BaseCase):
+    @allure.story("Редактирование пользователя")
+    @allure.title("Редактирование имени у пользователя")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_edit_just_created_user(self):
         # REGISTER
         register_data = self.prepare_registration_data()
