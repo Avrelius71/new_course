@@ -1,9 +1,10 @@
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
-import pytest
+import allure
 
 
+@allure.feature("Users")
 class TestUserRegister(BaseCase):
     negative_data = [
         ({'username': 'learnqa', 'firstName': 'lear', 'lastName': 'learnqa', 'email': 'vin@example.com'}, 'password'),
@@ -22,14 +23,20 @@ class TestUserRegister(BaseCase):
     negative_data_short_firstname = {'password': '123', 'username': 'learnqa', 'firstName': 'l',
                                      'lastName': 'learnqa', 'email': 'vin@example.com'}
 
+    @allure.story("Регистрация пользователя")
+    @allure.title("Регистрация нового пользоватлея")
+    @allure.severity(allure.severity_level.CRITICAL)
     def test_create_user_successfully(self):
         data = self.prepare_registration_data()
         response = MyRequests.post('/user/', data=data)
         Assertions.assert_status_code(response, 200)
         Assertions.assert_json_has_key(response, 'id')
 
-    def test_negative_format_email(self):
-        email = 'vinkotovexample.com'
+    @allure.story("Регистрация пользователя")
+    @allure.title("Регистрация пользователя с использованным email")
+    @allure.severity(allure.severity_level.NORMAL)
+    def test_create_user_with_existing_email(self):
+        email = 'vinkotov@example.com'
         data = self.prepare_registration_data(email)
         response = MyRequests.post('/user/', data=data)
         Assertions.assert_status_code(response,400)
